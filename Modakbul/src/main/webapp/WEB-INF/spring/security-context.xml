@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!어드민 페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<security:http pattern="/admin/**" auto-config="true" use-expressions="true"
+	authentication-manager-ref="sellerAuthManager">
+		<security:intercept-url pattern="/resources/**" access="permitAll" />
+<!-- 		로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 -->
+		<security:intercept-url pattern="/loginView" access="isAnonymous()" />
+		<security:intercept-url pattern="/registerUserView" access="isAnonymous()" />
+
+		<security:form-login
+			username-parameter="SELLER_ID"
+			password-parameter="SELLER_PW"
+			login-page="/seller/sellerLogin.mo"
+			login-processing-url="/seller/sLogin.mo"
+			default-target-url="/"
+			authentication-failure-url="/sellerLogin.mo" />
+			
+		<security:logout 
+			logout-url="/seller/logouts.mo"
+			logout-success-url="/"
+			invalidate-session="true"
+			delete-cookies="true" />
+		</security:http>
+		
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!멤버 페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->		
+   <security:http pattern="/member/**" auto-config="true" use-expressions="true"
+   authentication-manager-ref="memberAuthManager">
+      <security:intercept-url pattern="/resources/**" access="permitAll" />
+
+<!--       로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 -->
+      <security:intercept-url pattern="/loginView" access="isAnonymous()" />
+      <security:intercept-url pattern="/registerUserView" access="isAnonymous()" />
+
+      <security:form-login
+         username-parameter="MEMBER_ID"
+         password-parameter="MEMBER_PW"
+         login-page="/member/memberlogin.mo" 
+         login-processing-url="/member/mLogin.mo" 
+         default-target-url="/"  
+         authentication-failure-url="/memberlogin.mo" /> 
+         
+      <security:logout 
+         logout-url="/member/logouts.mo"
+         logout-success-url="/"
+         invalidate-session="true"
+         delete-cookies="true" />
+      </security:http>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!셀러 페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+	<security:http pattern="/seller/**" auto-config="true" use-expressions="true"
+	authentication-manager-ref="sellerAuthManager">
+
+		<security:intercept-url pattern="/resources/**" access="permitAll" />
+
+<!-- 		로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 -->
+		<security:intercept-url pattern="/loginView" access="isAnonymous()" />
+		<security:intercept-url pattern="/seller/sellerLogin.mo" access="isAnonymous()" />
+
+		<security:form-login
+			username-parameter="SELLER_ID"
+			password-parameter="SELLER_PW"
+			login-page="/seller/sellerLogin.mo"
+			login-processing-url="/seller/sLogin.mo"
+			default-target-url="/"
+			authentication-failure-url="/seller/sellerLogin.mo" />
+			
+		<security:logout 
+			logout-url="/seller/logouts.mo"
+			logout-success-url="/"
+			invalidate-session="true"
+			delete-cookies="true" />
+		</security:http>
+		
+		
+	<security:http pattern="/**" auto-config="true" use-expressions="true"
+	authentication-manager-ref="memberAuthManager">
+
+		<!-- 로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 -->
+		<security:intercept-url pattern="/resources/**" access="permitAll" />
+
+		<!-- 로그인된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 -->
+		<security:intercept-url pattern="/sellerJoin.mo" access="isAnonymous()" />
+		<security:intercept-url pattern="/memberLogin.mo" access="isAnonymous()" />
+		
+		<security:form-login
+			username-parameter="ID"
+			password-parameter="PW"
+			login-page="/naverLoginCall.mo"
+			login-processing-url="/nLogin.mo"
+			default-target-url="/"
+			authentication-failure-handler-ref="naverLoginFailHandler"
+			 />
+		
+		<security:logout 
+			logout-url="/logouts.mo"
+			logout-success-url="/"
+			invalidate-session="true"
+			delete-cookies="true" />
+		</security:http>
+		
+	
+	<security:authentication-manager id="sellerAuthManager">
+		<security:authentication-provider user-service-ref="sellerLoginService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<security:authentication-manager id="memberAuthManager">
+		<security:authentication-provider user-service-ref="memberLoginService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<security:authentication-manager id="adminAuthManager">
+		<security:authentication-provider user-service-ref="adminLoginService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<context:component-scan base-package="kr.co.modak" />
+</beans>

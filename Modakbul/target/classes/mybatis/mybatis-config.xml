@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+<!-- 자신이 만든 VO 경로에 맞춰 alias 네이밍 규칙을 지어 생성 -->
+      <typeAliases>
+            <typeAlias alias="MoUserSellerVO" type="kr.co.modak.user.seller.VO.MoUserSellerVO"></typeAlias>
+            <typeAlias alias="MoUserMemberVO" type="kr.co.modak.user.member.VO.MoUserMemberVO"></typeAlias>
+      </typeAliases>
+
+</configuration>

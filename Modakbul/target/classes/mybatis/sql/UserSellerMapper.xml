@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="userSeller">
+
+	<insert id="sellerJoin" parameterType="MoUserSellerVO">
+		insert into mo_user_seller(SELLER_PW, SELLER_NAME, SELLER_TEL, SELLER_EMAIL, SELLER_COMPANY_NUM)
+		 values (#{SELLER_PW}, #{SELLER_NAME}, #{SELLER_TEL}, #{SELLER_EMAIL}, #{SELLER_COMPANY_NUM})
+	</insert>
+	
+	<select id="sellerLogin" parameterType="String" resultType="MoUserSellerVO">
+		select SELLER_ID, SELLER_PW, SELLER_NUM, SELLER_DELETE from mo_user_seller where SELLER_ID = #{SELLER_ID}
+	</select>
+	
+	<select id="sellerInfoOne" parameterType="String" resultType="MoUserSellerVO">
+		select * from mo_user_seller where SELLER_NUM = #{SELLER_NUM}
+	</select>
+	
+	<select id="pwdchk" parameterType="MoUserSellerVO" resultType="MoUserSellerVO">
+		select * from mo_user_seller where SELLER_NUM = #{SELLER_NUM} AND SELLER_PW = #{SELLER_PW}
+	</select>
+	
+	<update id="sellerInfoUpdate" parameterType="MoUserSellerVO">
+		update mo_user_seller SET SELLER_NAME = #{SELLER_NAME}, SELLER_TEL= #{SELLER_TEL}, SELLER_EMAIL= #{SELLER_EMAIL} WHERE SELLER_NUM = #{SELLER_NUM}
+	</update>
+	
+	<update id="sellerDropUpdate" parameterType="MoUserSellerVO">
+		update mo_user_seller SET SELLER_PW = null, SELLER_NAME= null, SELLER_TEL=null, SELLER_EMAIL=null, SELLER_STATE = null, SELLER_DELETE = '2', SELLER_COMPANY_NUM = null WHERE SELLER_NUM = #{SELLER_NUM}
+	</update>
+</mapper>
